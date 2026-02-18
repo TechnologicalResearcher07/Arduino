@@ -26,24 +26,37 @@ Date: 17 February 2026
   https://docs.arduino.cc/built-in-examples/basics/Blink/
 */
 
-// the setup function runs once when you press reset or power the board
+// LED Pins
+const int led1 = 9;
+const int led2 = 10;
+
+// Piezo Pin
+const int speakerPin = 8;
+
 void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(10, OUTPUT);
-  pinMode(9, OUTPUT);
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
 }
 
-// the loop function runs over and over again forever
 void loop() {
-  digitalWrite(9, HIGH);  // turn the LED on (HIGH is the voltage level)
-  digitalWrite(10, LOW);   // turn the LED off by making the voltage LOW
-  delay(250);                      // wait for a second
-  
-  digitalWrite(10, HIGH);  // turn the LED on (HIGH is the voltage level)
-  digitalWrite(9, LOW);   // turn the LED off by making the voltage LOW
-  delay(250);
-}
 
+  // Wail UP
+  for (int freq = 400; freq <= 2000; freq += 10) {
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    tone(speakerPin, freq);
+    delay(5);
+  }
+
+  // Wail DOWN
+  for (int freq = 2000; freq >= 400; freq -= 10) {
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+    tone(speakerPin, freq);
+    delay(5);
+  }
+}
 
 
 
