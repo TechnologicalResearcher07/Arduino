@@ -41,23 +41,36 @@ void setup() {
 
 void loop() {
 
-  // Wail UP
-  for (int freq = 400; freq <= 2000; freq += 10) {
+  // -------- WAIL UP --------
+  for (float i = 0; i < 3.14; i += 0.02) {
+
+    // Sine wave sweep (more natural than linear)
+    float baseFreq = 600 + (sin(i) * 1000);  // 600Hz–1600Hz range
+    
+    // Add slight vibrato
+    float vibrato = sin(millis() * 0.02) * 30;
+    
+    int finalFreq = baseFreq + vibrato;
+
     digitalWrite(led1, HIGH);
     digitalWrite(led2, LOW);
-    tone(speakerPin, freq);
-    delay(5);
+    tone(speakerPin, finalFreq);
+    delay(10);
   }
 
-  // Wail DOWN
-  for (int freq = 2000; freq >= 400; freq -= 10) {
+  // -------- WAIL DOWN --------
+  for (float i = 3.14; i > 0; i -= 0.02) {
+
+    float baseFreq = 600 + (sin(i) * 1000);
+    float vibrato = sin(millis() * 0.02) * 30;
+    int finalFreq = baseFreq + vibrato;
+
     digitalWrite(led1, LOW);
     digitalWrite(led2, HIGH);
-    tone(speakerPin, freq);
-    delay(5);
+    tone(speakerPin, finalFreq);
+    delay(10);
   }
 }
-
 
 
 
