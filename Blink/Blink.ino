@@ -61,7 +61,7 @@ void loop() {
   // -------- WAIL DOWN --------
   for (float i = 3.14; i > 0; i -= 0.02) {
 
-    float baseFreq = 600 + (sin(i) * 1000);
+    float baseFreq = 700 + (sin(i) * 3000);
     float vibrato = sin(millis() * 0.02) * 30;
     int finalFreq = baseFreq + vibrato;
 
