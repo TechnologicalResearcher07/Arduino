@@ -27,8 +27,9 @@ Date: 17 February 2026
 */
 
 // LED Pins
-const int led1 = 9;
-const int led2 = 10;
+const int led1 = 9;    // PWM
+const int led2 = 10;   // PWM
+const int led3 = 5;    // PWM fade LED
 
 // Piezo Pin
 const int speakerPin = 8;
@@ -36,41 +37,61 @@ const int speakerPin = 8;
 void setup() {
   pinMode(led1, OUTPUT);
   pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
   pinMode(speakerPin, OUTPUT);
 }
 
 void loop() {
 
-  // -------- WAIL UP --------
-  for (float i = 0; i < 3.14; i += 0.02) {
+  // -------- FAST WAIL UP --------
+  for (float i = 0; i < 3.14; i += 0.04) {
 
-    // Sine wave sweep (more natural than linear)
-    float baseFreq = 600 + (sin(i) * 1000);  // 600Hz–1600Hz range
-    
-    // Add slight vibrato
-    float vibrato = sin(millis() * 0.02) * 30;
-    
+    // Higher and sharper sweep (800–2200 Hz)
+    float baseFreq = 800 + (sin(i) * 1400);
+
+    // Stronger vibrato for urgency
+    float vibrato = sin(millis() * 0.05) * 60;
+
     int finalFreq = baseFreq + vibrato;
 
-    digitalWrite(led1, HIGH);
-    digitalWrite(led2, LOW);
+    // FULL BRIGHT emergency LEDs
+    analogWrite(led1, 255);
+    analogWrite(led2, 0);
+
     tone(speakerPin, finalFreq);
-    delay(10);
+
+    updateFade();
+    delay(5);   // Faster sweep = more urgent
   }
 
-  // -------- WAIL DOWN --------
-  for (float i = 3.14; i > 0; i -= 0.02) {
+  // -------- FAST WAIL DOWN --------
+  for (float i = 3.14; i > 0; i -= 0.04) {
 
-    float baseFreq = 700 + (sin(i) * 3000);
-    float vibrato = sin(millis() * 0.02) * 30;
+    float baseFreq = 800 + (sin(i) * 1400);
+    float vibrato = sin(millis() * 0.05) * 60;
     int finalFreq = baseFreq + vibrato;
 
-    digitalWrite(led1, LOW);
-    digitalWrite(led2, HIGH);
+    analogWrite(led1, 0);
+    analogWrite(led2, 255);
+
     tone(speakerPin, finalFreq);
-    delay(10);
+
+    updateFade();
+    delay(5);
   }
 }
+
+
+// -------- Bright Peaceful Fade (Never Fully Dim) --------
+void updateFade() {
+
+  // Fade between 120 and 255 (always bright)
+  float brightness = (sin(millis() * 0.003) + 1) * 67.5 + 120;
+
+  analogWrite(led3, brightness);
+}
+
+
 
 
 
